@@ -1,49 +1,53 @@
 import './index.scss'
-const doc = document;
-const addTodoBtn = doc.getElementById('add-btn');
-const todoInput = doc.getElementById('todo-input');
-const list = doc.getElementById('list');
-let tempData = {}
+
+window.onload = () => {
+    cookieVerification()
+}
+
+const addTodoBtn = document.getElementById('add-btn');
+const todoInput = document.getElementById('todo-input');
+const list = document.getElementById('list');
+let taskStorage = [];
+console.log(taskStorage);
 
 
-todoInput.addEventListener('change', ({ target: { name, value } }) => { console.log(name, value) })
+const cookieVerification = () => {
+    if (localStorage.getItem('todo')) {
+        taskStorage = JSON.parse(localStorage.getItem('todo'))
+        for (let key in taskStorage) {
+            template(taskStorage[key].id, taskStorage[key].value)
+            console.log(key, taskStorage[key].id, taskStorage[key].value)
+        }
+    }
+}
 
 
 const template = (itemId, itemValue) => {
     list.insertAdjacentHTML('beforeend', `
 		<div class="item" id="item-${itemId}">
-			<input type="text" class="input-element" id="task-${itemId}" value="${itemValue}"  disabled/>
+			<input type="text"  class="input-element" id="task-${itemId}" value="${itemValue}"  disabled/>
 			<div class="action-btns">
-				<button class="action-btn save-btn hide" id="save-${itemId}">Save</button>
-				<button class="action-btn edit-btn" id="edit-${itemId}" >Edit</button>
-				<button class="action-btn remove-btn" id="delete-${itemId}">Delete</button>
+				<button  class="action-btn save-btn hide" data- id="save-${itemId}">Save</button>
+				<button  class="action-btn edit-btn" id="edit-${itemId}" >Edit</button>
+				<button  class="action-btn remove-btn" id="delete-${itemId}">Delete</button>
 			</div>
 		</div>`)
 }
 
 
-if (localStorage.getItem('todo') != undefined) {
-    tempData = JSON.parse(localStorage.getItem('todo'))
-    for (let key in tempData) {
-        template(key, tempData[key].value)
-        console.log(key, tempData[key].value)
-    }
-}
-
-
-// Task creation
 const createTask = () => {
     let id = createId()
     template(id, todoInput.value)
-    tempData[`${id}`] = {"value": todoInput.value }
-    console.log(tempData)
-    localStorage.setItem('todo', JSON.stringify(tempData))
+    taskStorage.push({ id: `${id}`, "value": todoInput.value })
+    console.log(taskStorage)
+    localStorage.setItem('todo', JSON.stringify(taskStorage))
     todoInput.value = ''
 }
 
 
 // Handler for clicking on the main task creation button
 addTodoBtn.addEventListener('click', createTask)
+
 list.addEventListener('click', function (e) {
     if (e.target.matches('.remove-btn')) {
         console.log('remove event')
@@ -68,13 +72,11 @@ list.addEventListener('click', function (e) {
 })
 
 
-// id generation
 const createId = () => {
     return (Math.random(0) * (100)).toFixed(2)
 }
 
 
-// Handler clicking on the main input
 todoInput.addEventListener("keypress", (keyPressed) => {
     const keyEnter = 13;
     if (keyPressed.which == keyEnter) {
@@ -83,48 +85,47 @@ todoInput.addEventListener("keypress", (keyPressed) => {
 })
 
 
-// Task removal
 const remove = (event) => {
-    const r = event.target.parentNode.parentNode
-    r.remove()
-    for (let key in tempData) {
-        if (key == r.id.split('-')[1]) {
-            console.log(tempData[key])
-            delete tempData[key]
+    const removeTask = event.target.parentNode.parentNode
+    removeTask.remove()
+    for (let key in taskStorage) {
+        if (taskStorage[key].id == removeTask.id.split('-')[1]) {
+            taskStorage.splice(key, 1)
         }
     }
-    localStorage.setItem('todo', JSON.stringify(tempData))
-    console.log('remove', r)
+    localStorage.setItem('todo', JSON.stringify(taskStorage))
+    console.log('remove')
 }
 
 
-// Save after editing task
 const editInputSave = (event) => {
     const saveBtn = event.path[1].children[1].children[0].id
     const task = event.target.id
-    const elemInput = doc.getElementById(task)
-    const save = doc.getElementById(saveBtn)
+    const elemInput = document.getElementById(task)
+    const save = document.getElementById(saveBtn)
     elemInput.addEventListener("keypress", (keyPressed) => {
         const keyEnter = 13;
         if (keyPressed.which == keyEnter) {
             elemInput.setAttribute('disabled', 'disabled');
             save.classList.add('hide')
-            console.log(task)
-            console.log(tempData[task.split('-')[1]])
-            tempData[task.split('-')[1]].value = event.target.value
-            localStorage.setItem('todo', JSON.stringify(tempData))
+            taskStorage.forEach(function (item) {
+                if (item.id == task.split('-')[1]) {
+                    item.value = event.target.value
+                    console.log(taskStorage)
+                }
+            })
+            localStorage.setItem('todo', JSON.stringify(taskStorage))
         }
     })
 }
 
 
-// Task editing
 const editTask = (event) => {
-    const i = event.path[1].children[0].id
-    const t = event.path[2].children[0].id
-    const task = doc.getElementById(t)
+    const saveId = event.path[1].children[0].id
+    const taskId = event.path[2].children[0].id
+    const task = document.getElementById(taskId)
     task.removeAttribute('disabled')
-    const save = doc.getElementById(i)
+    const save = document.getElementById(saveId)
     save.classList.remove('hide')
     task.focus()
     console.log('edit')
@@ -132,13 +133,18 @@ const editTask = (event) => {
 
 
 const save = (event) => {
-    const i = event.target.id
-    const t = event.path[2].children[0].id
-    const save = doc.getElementById(i)
-    const task = doc.getElementById(t)
+    const saveId = event.target.id
+    const taskId = event.path[2].children[0].id
+    const save = document.getElementById(saveId)
+    const task = document.getElementById(taskId)
     task.setAttribute('disabled', 'disabled');
     save.classList.add('hide')
-    tempData[t.split('-')[1]].value = task.value
-    localStorage.setItem('todo', JSON.stringify(tempData))
+    taskStorage.forEach(function (item) {
+        if (item.id == taskId.split('-')[1]) {
+            item.value = task.value
+            console.log(taskStorage)
+        }
+    })
+    localStorage.setItem('todo', JSON.stringify(taskStorage))
     console.log('save')
 }

@@ -25,11 +25,11 @@ const cookieVerification = () => {
 const template = (itemId, itemValue) => {
     list.insertAdjacentHTML('beforeend', `
 		<div class="item" id="item-${itemId}">
-			<input type="text"  class="input-element" id="task-${itemId}" value="${itemValue}"  disabled/>
+			<input type="text" data-action="input" class="input-element" id="task-${itemId}" value="${itemValue}"  disabled/>
 			<div class="action-btns">
-				<button  class="action-btn save-btn hide" data- id="save-${itemId}">Save</button>
-				<button  class="action-btn edit-btn" id="edit-${itemId}" >Edit</button>
-				<button  class="action-btn remove-btn" id="delete-${itemId}">Delete</button>
+				<button data-action="save" class="action-btn save-btn hide" data- id="save-${itemId}">Save</button>
+				<button data-action="edit" class="action-btn edit-btn" id="edit-${itemId}" >Edit</button>
+				<button data-action="remove" class="action-btn remove-btn" id="delete-${itemId}">Delete</button>
 			</div>
 		</div>`)
 }
@@ -48,28 +48,46 @@ const createTask = () => {
 // Handler for clicking on the main task creation button
 addTodoBtn.addEventListener('click', createTask)
 
-list.addEventListener('click', function (e) {
-    if (e.target.matches('.remove-btn')) {
-        console.log('remove event')
-        remove(e)
-        return
+
+function Handlers(elem) {
+    this.save = () => save(event)
+    this.edit = () => editTask(event)
+    this.remove = () => remove(event)
+    this.input = () => editInputSave(event)
+
+    var self = this
+
+    elem.onclick = function(event) {
+        var action = event.target.getAttribute('data-action')
+        if(action) {
+            self[action]()
+        } 
     }
-    if (e.target.matches('.edit-btn')) {
-        console.log('edit event')
-        editTask(e)
-        return
-    }
-    if (e.target.matches('.save-btn')) {
-        console.log('save event')
-        save(e)
-        return
-    }
-    if (e.target.matches('.input-element')) {
-        console.log('input-element-save event')
-        editInputSave(e)
-        return
-    }
-})
+}
+new Handlers(list)
+
+// list.addEventListener('click', function (e) {
+//     if (e.target.matches('.remove-btn')) {
+//         console.log('remove event')
+//         remove(e)
+//         return
+//     }
+//     if (e.target.matches('.edit-btn')) {
+//         console.log('edit event')
+//         editTask(e)
+//         return
+//     }
+//     if (e.target.matches('.save-btn')) {
+//         console.log('save event')
+//         save(e)
+//         return
+//     }
+//     if (e.target.matches('.input-element')) {
+//         console.log('input-element-save event')
+//         editInputSave(e)
+//         return
+//     }
+// })
 
 
 const createId = () => {

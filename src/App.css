@@ -1,0 +1,94 @@
+/* Элементы задач */
+.item {
+  display: flex;
+  height: 60px; /* Увеличиваем высоту элемента */
+  border-radius: 10px;
+  margin-bottom: 20px; /* Отступ между задачами */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Более выраженная тень для элементов */
+  background-color: #ffffff; /* Белый фон для элементов */
+  padding: 10px; /* Внутренние отступы для элемента */
+  border: 1px solid #e0e0e0; /* Граница для выделения блока */
+}
+
+.input-element {
+  flex: 1;
+  height: 100%;
+  padding-left: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.action-btns {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+/* Кнопки действий */
+.edit-btn,
+.remove-btn,
+.complete-btn,
+.save-btn {
+  height: 35px; /* Высота кнопок */
+  margin-left: 5px; /* Пробел между кнопками */
+  padding: 0 10px; /* Отступ для кнопок */
+  color: #ffffff;
+  background-color: #6c757d;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.edit-btn:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+.remove-btn:hover {
+  background-color: #dc3545;
+  transform: scale(1.05);
+}
+
+.save-btn:hover {
+  background-color: #28a745;
+  transform: scale(1.05);
+}
+
+/* Подсветка завершенных задач */
+.completed {
+  border: 2px solid #28a745;
+  background-color: #e9f7ef;
+}
+
+/* Стиль для блока кнопок */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px; /* Отступ сверху для визуального разделения */
+}
+
+.move-btn {
+  height: 30px; /* Высота кнопок перемещения */
+  width: 30px; /* Ширина кнопок перемещения */
+  margin-left: 5px; /* Пробел между кнопками */
+  color: #ffffff; /* Белый цвет текста */
+  background-color: #007bff; /* Синий цвет кнопок перемещения */
+  border: none; /* Без границы */
+  border-radius: 5px; /* Закругленные углы */
+  cursor: pointer; /* Указатель курсора при наведении */
+  transition: background-color 0.3s, transform 0.2s; /* Плавный переход при наведении */
+}
+
+.move-btn:hover {
+  background-color: #0056b3; /* Темный оттенок при наведении */
+  transform: scale(1.05); /* Легкое увеличение при наведении */
+}
+
+.complete-btn:hover {
+  background-color: #5a6268; /* Темный оттенок при наведении */
+  transform: scale(1.05); /* Легкое увеличение при наведении */
+}

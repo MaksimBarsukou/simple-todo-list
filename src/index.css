@@ -1,0 +1,52 @@
+/* Основные стили приложения */
+.app {
+  width: 80%;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 20px; /* Добавляем отступы внутри контейнера */
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+  color: #333;
+}
+
+/* Область ввода */
+.input-area {
+  display: flex;
+  margin: 0 0 20px; /* Увеличиваем отступ снизу */
+  padding: 10px 0;
+  border-bottom: 1px solid #cccccc;
+  border-top: 1px solid #cccccc;
+  justify-content: space-around;
+  background-color: #f9f9f9;
+  border-radius: 5px; /* Закругляем углы области ввода */
+}
+
+.todo-input {
+  width: 80%;
+  height: 40px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  font-size: 18px;
+}
+
+/* Кнопка добавления */
+.input-btn {
+  width: 60px;
+  height: 45px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.input-btn:hover {
+  background-color: #0056b3;
+}
